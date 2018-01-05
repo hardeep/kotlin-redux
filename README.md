@@ -1,5 +1,7 @@
 # Redux for Kotlin
 
+[![Release](https://jitpack.io/v/hardeep/kotlin-redux.svg)](https://jitpack.io/#hardeep/kotlin-redux)
+
 ## Example usage
 
     import ca.hardeep.kotlin.redux.*
