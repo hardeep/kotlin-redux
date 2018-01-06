@@ -20,13 +20,16 @@ fun <State> combineReducers(vararg reducers: Reducer<State>): Reducer<State> {
 class Store<State> {
     private var currentReducer: Reducer<State>
     private var currentState: State
-    var dispatchMethod: Dispatcher
+    var innerDispatch: Dispatcher
+    private val lock: Object = Object()
 
     constructor(reducer: Reducer<State>, currentState: State) {
         this.currentReducer = reducer
         this.currentState = currentState
-        this.dispatchMethod = fun (action: Action): Action  {
-            this.currentState = this.currentReducer(this.currentState, action)
+        this.innerDispatch = fun (action: Action): Action {
+            synchronized(lock) {
+                this.currentState = this.currentReducer(this.currentState, action)
+            }
             return action
         }
     }
@@ -36,7 +39,7 @@ class Store<State> {
     }
 
     fun dispatch(action: Action) : Action {
-        return this.dispatchMethod(action)
+        return this.innerDispatch(action)
     }
 }
 
@@ -54,7 +57,7 @@ fun <State> applyMiddleware(middlewares: List<Middleware<State>>): StoreCreator<
 
     return fun( reducer: Reducer<State>, preloadedState) : Store<State> {
             val store = Store<State>(reducer, preloadedState)
-            val originalDispatch = store.dispatchMethod
+            val originalDispatch = store.innerDispatch
             val chain = middlewares.map({ middleware -> middleware(store)})
 
             /* Create function composition of all middleware. [f, g, h] -> f(g(h())) */
@@ -64,7 +67,7 @@ fun <State> applyMiddleware(middlewares: List<Middleware<State>>): StoreCreator<
                 resolved = it(resolved)
             }
 
-            store.dispatchMethod = fun(action: Action) : Action {
+            store.innerDispatch = fun(action: Action) : Action {
                 return resolved(action)
             }
 
