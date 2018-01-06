@@ -1,3 +1,8 @@
 build/
 .gradle
 .idea
+kotlin-redux.iml
+kotlin-redux.ipr
+kotlin-redux.iws
+kotlin-redux_test.iml
+kotlin-redux_main.iml
