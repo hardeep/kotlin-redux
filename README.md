@@ -1,6 +1,7 @@
 # Redux for Kotlin
 
 [![Release](https://jitpack.io/v/hardeep/kotlin-redux.svg)](https://jitpack.io/#hardeep/kotlin-redux)
+[![Known Vulnerabilities](https://snyk.io/test/github/hardeep/kotlin-redux/badge.svg)](https://snyk.io/test/github/hardeep/kotlin-redux)
 
 ## Example usage
 
